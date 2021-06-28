@@ -1,0 +1,169 @@
+<html>
+<head>
+  <meta charset="utf-8">
+<style>
+  body{
+    margin: 0 auto;
+    overflow: hidden;
+    /*background-color: black;*/
+  }
+
+  #container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+</style>
+</head>
+<body>
+
+<div id="container"></div>
+
+<script>
+
+  const container = document.getElementById("container");
+
+  const canvas = document.createElement('canvas');  
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.classList.add("canvas");
+  canvas.style.position = "absolute"; 
+  canvas.style.zIndex = "+2"; 
+  container.appendChild(canvas);           
+  const ctx = canvas.getContext('2d');
+
+  const canvasO = document.createElement('canvas');
+  canvasO.width = "130";
+  canvasO.height = "130";
+  const ctxO = canvasO.getContext('2d');
+
+  //work out the border of the emoji
+  let bound = {     
+      top: null,
+      left: null,
+      right: null,
+      bottom: null
+    },boundX,boundY;
+
+  let imgData;
+  let fontSize = "100";
+  let emojiArray = [];
+
+  //lets put a function on that face 
+   function emojiFunc ({emoji}){
+
+    //console.log(emojiList[i]);
+
+    ctxO.clearRect(0, 0, canvasO.width, canvasO.height);
+    imgData = [];
+    bound = {     
+      top: null,
+      left: null,
+      right: null,
+      bottom: null
+    };
+    
+    ctxO.textBaseline = "top"; 
+    //ctxO.textBaseline = "middle"; 
+    ctxO.textAlign = "center";
+    ctxO.font = fontSize+"px serif"; //a font type is needed even though we are using emojis
+    ctxO.fillText(emoji, 15+(fontSize/2), 15);
+
+    imgData = ctxO.getImageData(0, 0, 130, 130);
+    let imgBase64 = canvasO.toDataURL();
+
+    for (let j = 0; j < imgData.data.length; j += 4) {
+      if (imgData.data[j+3] !== 0) {
+            
+          boundX = (j / 4) % canvasO.width;
+          boundY = ~~((j / 4) / canvasO.width);
+  
+          if (bound.top === null) {
+            bound.top = boundY;
+          }
+      
+          if (bound.left === null) {
+            bound.left = boundX; 
+          } else if (boundX < bound.left) {
+            bound.left = boundX;
+          }
+      
+          if (bound.right === null) {
+            bound.right = boundX; 
+          } else if (bound.right < boundX) {
+            bound.right = boundX;
+          }
+      
+          if (bound.bottom === null) {
+            bound.bottom = boundY;
+          } else if (bound.bottom < boundY) {
+            bound.bottom = boundY;
+          }
+        }
+      }
+        //console.log("test"+j);
+
+      let trimHeight = bound.bottom - bound.top,
+      trimWidth = bound.right - bound.left;
+
+      let dWidth,dHeight;
+
+      if (trimWidth > trimHeight && trimWidth > fontSize) {
+
+        dWidth = trimWidth - (trimWidth - fontSize);
+        dHeight = trimHeight  - (trimWidth - fontSize);
+
+      } else if (trimHeight > trimWidth && trimHeight > fontSize){
+
+        dWidth = trimWidth - (trimHeight - fontSize);
+        dHeight = trimHeight - (trimHeight- fontSize);
+
+      } else if (trimHeight == trimWidth){
+
+        dWidth = trimWidth - (trimHeight - fontSize);
+        dHeight = trimHeight - (trimHeight- fontSize);
+
+      }
+
+    let emojiInfo = {emoji:emoji,emoji64:imgBase64,sx:bound.left,sy:bound.top,sWidth:trimWidth,sHeight:trimHeight,dWidth:dWidth,dHeight:dHeight};
+    emojiArray.push(emojiInfo);
+
+  }
+
+  function draw64({emoji,context,dx,dy}){
+
+    if (emojiArray.length === 0 ){
+        emojiFunc({emoji:emoji});
+        console.log("added "+emoji+" to emojiArray")
+    } else if (emojiArray.find(obj => obj.emoji != emoji)) {
+        emojiFunc({emoji:emoji});
+        console.log("added "+emoji+" to emojiArray")
+        
+    }
+
+    //emojiFunc({emoji:emoji});
+
+
+    let image = new Image();
+    image.onload = function() {
+
+        let sx = emojiArray.find(obj => obj.emoji == emoji).sx,
+          sy = emojiArray.find(obj => obj.emoji == emoji).sy, //take away 1 to fix canvas stuff 
+          sWidth = emojiArray.find(obj => obj.emoji == emoji).sWidth,
+          sHeight = emojiArray.find(obj => obj.emoji == emoji).sHeight,
+          dWidth = emojiArray.find(obj => obj.emoji == emoji).dWidth,
+          dHeight = emojiArray.find(obj => obj.emoji == emoji).dHeight;
+
+          context.drawImage(image, sx ,sy,sWidth,sHeight,0+dx,dy,dWidth,dHeight);
+
+    };
+    image.src = emojiArray.find(obj => obj.emoji == emoji).emoji64;   
+  }
+  
+  //this seems like a lot of work to draw a emoji lol
+ draw64({emoji:"🦝",context:ctx,dx:0,dy:0})
+ draw64({emoji:"😎",context:ctx,dx:100,dy:0})
+
+</script>
+</body>
+</html>
