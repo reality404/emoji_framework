@@ -1,0 +1,163 @@
+<html>
+<head>
+  <meta charset="utf-8">
+<style>
+  body{
+    margin: 0 auto;
+    overflow: hidden;
+    /*background-color: black;*/
+  }
+
+  #container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+</style>
+</head>
+<body>
+
+<div id="container"></div>
+
+<script>
+
+  const container = document.getElementById("container");
+
+  const canvas = document.createElement('canvas');  
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.classList.add("canvas");
+  canvas.style.position = "absolute"; 
+  canvas.style.zIndex = "+2"; 
+  container.appendChild(canvas);           
+  const ctx = canvas.getContext('2d');
+
+  const canvasO = document.createElement('canvas');
+  const ctxO = canvasO.getContext('2d');
+
+  let emojiSize = 100,
+      emojiAlign = "left", //left, centre, right
+      emojiBaseline = "top";    //top, bottom supported
+
+  let fontSize = "100";
+  let emojiArray = [];
+
+  //lets put a function on that face 
+   function emojiFunc ({emoji}){
+
+    let width = +fontSize+ +30;
+    let height = +fontSize+ +30;
+
+    canvasO.width = width;
+    canvasO.height = height;
+
+    ctxO.textBaseline = "top";  
+    ctxO.textAlign = "center";
+    ctxO.font = fontSize+"px serif"; //a font type is needed even though we are using emojis
+    ctxO.fillText(emoji, 15+(fontSize/2), 15);
+
+    let imgData = ctxO.getImageData(0, 0, 130, 130);
+    let buffer32 = new Uint32Array(imgData.data.buffer);
+    let imgBase64 = canvasO.toDataURL();
+
+
+    let left = width,
+        right = 0;
+    for(let i = 0; i < height; i++) { 
+
+      for(let j = 0; j < width; j++) {  
+        if (buffer32[j + i * width] > 0) {  
+          if (j < left) left = j;
+        }
+     }
+
+     for(let k = width; k >= 0; k--) {  
+        if (buffer32[k + i * width] > 0) {  
+          if (k > right) right = k;
+        }
+     }
+
+    }
+
+    let top = height,
+        bottom = 0;
+    for(let i = 0; i < width; i++) {
+
+      for(let j = 0; j < height; j++) {
+        if (buffer32[j + i * width] > 0) {
+            if (j < top) top = j;
+        }
+      }
+
+      for(let k = height; k >= 0; k--) {
+        if (buffer32[k + i * width] > 0) {
+            if (k > bottom) bottom = k;
+        }
+      }
+
+    }
+
+    console.log("left: ",left," right: ",right,"top: ",top," bottom: ",bottom);
+
+    //ctx.strokeRect(left, top, right-left, bottom-top);
+
+
+
+    let emojiInfo = {emoji:emoji,emoji64:imgBase64,left:left-2,right:right+2,top:top-2,bottom:bottom+2};
+    emojiArray.push(emojiInfo);
+
+  }
+
+  //emojiFunc({emoji:"🌈"})
+  
+
+  function draw64({emoji,context,dx,dy}){
+
+    if (emojiArray.length === 0 ){
+        emojiFunc({emoji:emoji});
+        console.log("added "+emoji+" to emojiArray")
+    } else if (emojiArray.find(obj => obj.emoji != emoji)) {
+        emojiFunc({emoji:emoji});
+        console.log("added "+emoji+" to emojiArray")
+        
+    }
+
+    //emojiFunc({emoji:emoji});
+
+
+    let image = new Image();
+    image.onload = function() {
+
+        let sx = emojiArray.find(obj => obj.emoji == emoji).left,
+          sy = emojiArray.find(obj => obj.emoji == emoji).top, 
+          sWidth = emojiArray.find(obj => obj.emoji == emoji).right - emojiArray.find(obj => obj.emoji == emoji).left,
+          sHeight = emojiArray.find(obj => obj.emoji == emoji).bottom - emojiArray.find(obj => obj.emoji == emoji).top,
+          dWidth = sWidth,
+          dHeight = sHeight;
+
+          console.log(sy)
+
+          //context.drawImage(image, 0,0);
+          context.drawImage(image,sy ,sy,sWidth,sHeight,0,0,dWidth,dHeight);
+
+    };
+    image.src = emojiArray.find(obj => obj.emoji == emoji).emoji64;   
+  }
+  
+  //this seems like a lot of work to draw a emoji lol
+
+ draw64({emoji:"😍",context:ctx,dx:0,dy:0})
+ ctx.font = "100px Georgia";
+ctx.fillText("🌈", -5, 95);
+
+ //emojiSize = 100;
+ //emojiAlign = "left"; //left, centre, right
+ //emojiBaseline = "top";    //top, bottom supported
+
+  
+
+
+
+</script>
+</body>
+</html>
