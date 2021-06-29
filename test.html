@@ -103,8 +103,8 @@
       }
         //console.log("test"+j);
 
-      let trimHeight = bound.bottom - bound.top,
-      trimWidth = bound.right - bound.left;
+      let trimHeight = bound.bottom - bound.top + 1,
+      trimWidth = bound.right - bound.left + 1;
 
       let dWidth,dHeight;
 
@@ -154,15 +154,18 @@
           dWidth = emojiArray.find(obj => obj.emoji == emoji).dWidth,
           dHeight = emojiArray.find(obj => obj.emoji == emoji).dHeight;
 
-          context.drawImage(image, sx ,sy,sWidth,sHeight,0+dx,dy,dWidth,dHeight);
+          console.log(sWidth)
+
+          context.drawImage(image, sx ,sy,sWidth,sHeight,-1+dx,-1+dy,dWidth,dHeight);
 
     };
     image.src = emojiArray.find(obj => obj.emoji == emoji).emoji64;   
   }
   
   //this seems like a lot of work to draw a emoji lol
- draw64({emoji:"🦝",context:ctx,dx:0,dy:0})
- draw64({emoji:"😎",context:ctx,dx:100,dy:0})
+ draw64({emoji:"🌈",context:ctx,dx:0,dy:0})
+ //draw64({emoji:"😎",context:ctx,dx:100,dy:0})
+
 
 </script>
 </body>
