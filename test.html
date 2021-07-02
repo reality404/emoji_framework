@@ -130,12 +130,14 @@
 
   }
 
-  function draw64({emoji,context,dx,dy}){
+  function draw64({emoji,context,dx,dy,size}){
 
     if (emojiArray.length === 0 ){
         emojiFunc({emoji:emoji});
         console.log("added "+emoji+" to emojiArray")
-    } else if (emojiArray.find(obj => obj.emoji != emoji)) {
+      } else if (emojiArray.find(obj => obj.emoji == emoji)) {
+        console.log("found: "+emoji)
+      } else if (emojiArray.find(obj => obj.emoji !== emoji)) {
         emojiFunc({emoji:emoji});
         console.log("added "+emoji+" to emojiArray")
         
@@ -154,18 +156,76 @@
           dWidth = emojiArray.find(obj => obj.emoji == emoji).dWidth,
           dHeight = emojiArray.find(obj => obj.emoji == emoji).dHeight;
 
-          console.log(sWidth)
+          console.log("dWidth: ",dWidth," dHeight: ",dHeight)
 
-          context.drawImage(image, sx ,sy,sWidth,sHeight,-1+dx,-1+dy,dWidth,dHeight);
+          context.drawImage(image, sx ,sy,sWidth,sHeight,-1+dx,-1+dy,(size / 100) * dWidth,(size / 100) * dHeight);
 
     };
     image.src = emojiArray.find(obj => obj.emoji == emoji).emoji64;   
   }
   
-  //this seems like a lot of work to draw a emoji lol
- draw64({emoji:"🌈",context:ctx,dx:0,dy:0})
- //draw64({emoji:"😎",context:ctx,dx:100,dy:0})
+  let emojiList = ["❤️","🧡","💛","💚","💙","💜","🤎","🖤","🤍","💗","🐱","😼","😹","🙀","😾","😿","😻","😺","😸","😽","🔥","📎","👀","👁️‍🗨️","🌜","🍏","🔩","✍️","💩"];
+  for (let i = 0; i < emojiList.length; i++) {
+    emojiFunc({emoji:emojiList[i]});
+  }
+  console.log(emojiArray);
 
+    draw64({emoji:"💜",context:ctx,dx:200,dy:200,size:100});
+    console.log(emojiArray);
+  
+
+  //this seems like a lot of work to draw a emoji lol
+
+  let imgArray = [];
+  for (let i = 0; i < 10; i++) {
+    //imgArray[i].src = "cat.jpg"
+    imgArray[i] = new Image()
+    imgArray[i].src = emojiArray.find(obj => obj.emoji == "💜").emoji64;
+  }
+  console.log(imgArray);
+
+
+  imgArray[1].onload = function ()  {  
+      //ctx.drawImage(imgArray[1], 0, 0)
+
+  }
+
+
+  var images = [emojiArray.find(obj => obj.emoji == "💜").emoji64,emojiArray.find(obj => obj.emoji == "🧡").emoji64];
+  var promiseArray = images.map(function(imgurl){
+   var prom = new Promise(function(resolve,reject){
+       var img = new Image();
+       img.onload = function(){
+           resolve(img);
+       };
+       img.src = imgurl;
+   });
+   return prom;
+});
+
+
+let x = 0;
+
+Promise.all(promiseArray).then(images => { // new fuction if all images are loaded with the image data
+  console.log("img: ",images[0])
+
+  function drawIt() { 
+    window.requestAnimationFrame(drawIt);  
+
+    ctx.clearRect(0,0,canvas.width,canvas.height)
+
+    x +=1;
+
+  
+  
+    ctx.drawImage(images[1],0 ,x )
+
+    ctx.drawImage(images[0],115 ,x )
+
+  }
+drawIt();
+
+}); // end the promise!
 
 </script>
 </body>
