@@ -101,67 +101,13 @@
           }
         }
       }
-        //console.log("test"+j);
 
       let trimHeight = bound.bottom - bound.top + 1,
       trimWidth = bound.right - bound.left + 1;
 
-      let dWidth,dHeight;
-
-      if (trimWidth > trimHeight && trimWidth > fontSize) {
-
-        dWidth = trimWidth - (trimWidth - fontSize);
-        dHeight = trimHeight  - (trimWidth - fontSize);
-
-      } else if (trimHeight > trimWidth && trimHeight > fontSize){
-
-        dWidth = trimWidth - (trimHeight - fontSize);
-        dHeight = trimHeight - (trimHeight- fontSize);
-
-      } else if (trimHeight == trimWidth){
-
-        dWidth = trimWidth - (trimHeight - fontSize);
-        dHeight = trimHeight - (trimHeight- fontSize);
-
-      }
-
-    let emojiInfo = {emoji:emoji,emoji64:imgBase64,sx:bound.left,sy:bound.top,sWidth:trimWidth,sHeight:trimHeight,dWidth:dWidth,dHeight:dHeight};
+    let emojiInfo = {emoji:emoji,emoji64:imgBase64,sx:bound.left,sy:bound.top,sWidth:trimWidth,sHeight:trimHeight};
     emojiArray.push(emojiInfo);
 
-  }
-
-  function draw64({emoji,context,dx,dy,size}){
-
-    if (emojiArray.length === 0 ){
-        emojiFunc({emoji:emoji});
-        console.log("added "+emoji+" to emojiArray")
-      } else if (emojiArray.find(obj => obj.emoji == emoji)) {
-        console.log("found: "+emoji)
-      } else if (emojiArray.find(obj => obj.emoji !== emoji)) {
-        emojiFunc({emoji:emoji});
-        console.log("added "+emoji+" to emojiArray")
-        
-    }
-
-    //emojiFunc({emoji:emoji});
-
-
-    let image = new Image();
-    image.onload = function() {
-
-        let sx = emojiArray.find(obj => obj.emoji == emoji).sx,
-          sy = emojiArray.find(obj => obj.emoji == emoji).sy, //take away 1 to fix canvas stuff 
-          sWidth = emojiArray.find(obj => obj.emoji == emoji).sWidth,
-          sHeight = emojiArray.find(obj => obj.emoji == emoji).sHeight,
-          dWidth = emojiArray.find(obj => obj.emoji == emoji).dWidth,
-          dHeight = emojiArray.find(obj => obj.emoji == emoji).dHeight;
-
-          console.log("dWidth: ",dWidth," dHeight: ",dHeight)
-
-          context.drawImage(image, sx ,sy,sWidth,sHeight,-1+dx,-1+dy,(size / 100) * dWidth,(size / 100) * dHeight);
-
-    };
-    image.src = emojiArray.find(obj => obj.emoji == emoji).emoji64;   
   }
   
   let emojiList = ["❤️","🧡","💛","💚","💙","💜","🤎","🖤","🤍","💗","🐱","😼","😹","🙀","😾","😿","😻","😺","😸","😽","🔥","📎","👀","👁️‍🗨️","🌜","🍏","🔩","✍️","💩"];
@@ -170,28 +116,33 @@
   }
   console.log(emojiArray);
 
-    draw64({emoji:"💜",context:ctx,dx:200,dy:200,size:100});
-    console.log(emojiArray);
-  
 
-  //this seems like a lot of work to draw a emoji lol
-
-  let imgArray = [];
-  for (let i = 0; i < 10; i++) {
-    //imgArray[i].src = "cat.jpg"
-    imgArray[i] = new Image()
-    imgArray[i].src = emojiArray.find(obj => obj.emoji == "💜").emoji64;
-  }
-  console.log(imgArray);
-
-
-  imgArray[1].onload = function ()  {  
-      //ctx.drawImage(imgArray[1], 0, 0)
-
+  function emojiGet(emoji,get){
+    let output = emojiArray.find(obj => obj.emoji == emoji)[get];
+    return(output);
   }
 
+  console.log(emojiGet("💜","sx"))
 
-  var images = [emojiArray.find(obj => obj.emoji == "💜").emoji64,emojiArray.find(obj => obj.emoji == "🧡").emoji64];
+
+
+  function emojiSize(emoji,size){
+
+    let sWidth = emojiArray.find(obj => obj.emoji == emoji).sWidth;
+    let sHeight = emojiArray.find(obj => obj.emoji == emoji).sHeight;
+
+    let dWidth = sWidth - (sWidth - size);
+    let dHeight = sHeight - (sWidth - size);
+
+    return[dWidth,dHeight];
+
+  }
+
+  //let [dWidth, dHeight] = emojiSizeFunc({emoji:"💙",size:10});
+  //console.log(dWidth);
+
+
+  var images = [emojiGet("💛","emoji64"),emojiGet("🤍","emoji64"),emojiGet("💜","emoji64"),emojiGet("🖤","emoji64")];
   var promiseArray = images.map(function(imgurl){
    var prom = new Promise(function(resolve,reject){
        var img = new Image();
@@ -204,7 +155,8 @@
 });
 
 
-let x = 0;
+let x = 1;
+let state = true ;
 
 Promise.all(promiseArray).then(images => { // new fuction if all images are loaded with the image data
   console.log("img: ",images[0])
@@ -213,14 +165,31 @@ Promise.all(promiseArray).then(images => { // new fuction if all images are load
     window.requestAnimationFrame(drawIt);  
 
     ctx.clearRect(0,0,canvas.width,canvas.height)
+    
+    if (x < 500 && state === true){
+      x +=1;
+      console.log(x)
+    } 
 
-    x +=1;
+    if (x > 500 || x === 500){
+      state = false;
+      console.log(x)
+    } 
 
+    if (state === false && x > 0){
+      x -=1;
+    }
+
+    if (x === 0) {
+    state = true;
+    }
   
-  
-    ctx.drawImage(images[1],0 ,x )
+    ctx.drawImage(images[0],emojiGet("💛","sx"),emojiGet("💜","sy"),emojiGet("💜","sWidth"),emojiGet("💜","sHeight"),300-(x/2),300-(x/2),(emojiSize("💜",10)[0])+x,(emojiSize("💜",10)[1])+x);
+    
+    //ctx.drawImage(images[1],emojiGet("💜","sx"),emojiGet("💜","sy"),emojiGet("💜","sWidth"),emojiGet("💜","sHeight"),100,x,emojiSize("💜",100)[0],emojiSize("💜",100)[1]);
+    //context.drawImage(image, sx ,sy,sWidth,sHeight,dx,dy,dWidth,dHeight);
 
-    ctx.drawImage(images[0],115 ,x )
+    //ctx.drawImage(images[0],114 ,x )
 
   }
 drawIt();
