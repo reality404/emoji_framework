@@ -156,7 +156,17 @@
 
 
 let x = 1;
+let x1 = 1;
+let x2 = 1;
+let x3 = 1;
+let x4 = 1;
+let x5 = 1;
 let state = true ;
+let state1 = true ;
+let state2 = true ;
+let state3 = true ;
+let state4 = true ;
+let state5 = true ;
 
 Promise.all(promiseArray).then(images => { // new fuction if all images are loaded with the image data
   console.log("img: ",images[0])
@@ -183,8 +193,50 @@ Promise.all(promiseArray).then(images => { // new fuction if all images are load
     if (x === 0) {
     state = true;
     }
+
+    if (x1 < 400 && state1 === true){
+      x1 +=1;
+    } 
+    if (x1 > 400 || x1 === 400){
+      state1 = false;
+    } 
+    if (state1 === false && x1 > 0){
+      x1 -=1;
+    }
+    if (x1 === 0) {
+    state1 = true;
+    }
+
+    if (x2 < 300 && state2 === true){
+      x2 +=1;
+    } 
+    if (x2 > 300 || x2 === 300){
+      state2 = false;
+    } 
+    if (state2 === false && x2 > 0){
+      x2 -=1;
+    }
+    if (x2 === 0) {
+    state2 = true;
+    }
+
+    if (x3 < 200 && state3 === true){
+      x3 +=1;
+    } 
+    if (x3 > 200 || x3 === 200){
+      state3 = false;
+    } 
+    if (state3 === false && x3 > 0){
+      x3 -=1;
+    }
+    if (x3 === 0) {
+    state3 = true;
+    }
   
     ctx.drawImage(images[0],emojiGet("💛","sx"),emojiGet("💜","sy"),emojiGet("💜","sWidth"),emojiGet("💜","sHeight"),300-(x/2),300-(x/2),(emojiSize("💜",10)[0])+x,(emojiSize("💜",10)[1])+x);
+    ctx.drawImage(images[1],emojiGet("🤍","sx"),emojiGet("💜","sy"),emojiGet("💜","sWidth"),emojiGet("💜","sHeight"),300-(x1/2),300-(x1/2),(emojiSize("💜",10)[0])+x1,(emojiSize("💜",10)[1])+x1);
+    ctx.drawImage(images[2],emojiGet("🤍","sx"),emojiGet("💜","sy"),emojiGet("💜","sWidth"),emojiGet("💜","sHeight"),300-(x2/2),300-(x2/2),(emojiSize("💜",10)[0])+x2,(emojiSize("💜",10)[1])+x2);
+    ctx.drawImage(images[3],emojiGet("🤍","sx"),emojiGet("💜","sy"),emojiGet("💜","sWidth"),emojiGet("💜","sHeight"),300-(x3/2),300-(x3/2),(emojiSize("💜",10)[0])+x3,(emojiSize("💜",10)[1])+x3);
     
     //ctx.drawImage(images[1],emojiGet("💜","sx"),emojiGet("💜","sy"),emojiGet("💜","sWidth"),emojiGet("💜","sHeight"),100,x,emojiSize("💜",100)[0],emojiSize("💜",100)[1]);
     //context.drawImage(image, sx ,sy,sWidth,sHeight,dx,dy,dWidth,dHeight);
