@@ -157,75 +157,230 @@
    //drawEmoji({context:ctx,emoji:"🔥",size:0,dx:0,dy:0});
 
 
-  let x = 0;
-  let x2 = 2;
+  let x1 = 0;
+  let x2 = 0;
   let state = true ;
+
+  let x3 = -250;
+  let x4 = -250;
+  let state2 = true 
 
   function drawIt() { 
     window.requestAnimationFrame(drawIt);
-    
-    x += 1;
+    ctx.clearRect(0,0,canvas.width,canvas.height)
 
+    x1 += 1;
     if (x2 < 100 && state){
-      x2 += 1;
-      
+      x2 += 1; 
     }
 
-    
-    if (x > 100){
-       state = false;
-      
+    if (x1 > 100){
+       state = false; 
     }
 
-    if (x > 250) {
-
+    if (x1 > 250) {
       x2 -=1 ;
     }
 
 
-    
-
-    ctx.clearRect(0,0,canvas.width,canvas.height)
-
     if (x2 > 99) {
-      drawEmoji({context:ctx,emoji:"⬜",size:100,dx:100,dy:100});
+      drawEmoji({context:ctx,emoji:"⬜",size:100,dx:0,dy:0});
     }
 
     if (x2 < 100) {
-      drawEmoji({context:ctx,emoji:"⬜",size:x2,dx:150-(x2/2),dy:150-(x2/2)});
+      drawEmoji({context:ctx,emoji:"⬜",size:x2,dx:50-(x2/2),dy:50-(x2/2)});
     }
     
     if (x2 < 80) {
-      drawEmoji({context:ctx,emoji:"🟦",size:x2,dx:150-(x2/2),dy:150-(x2/2)});
+      drawEmoji({context:ctx,emoji:"🟦",size:x2,dx:50-(x2/2),dy:50-(x2/2)});
     }
 
-    if (x > 250 && x < 260 ) {
-
-
-      drawEmoji({context:ctx,emoji:"🟥",size:x2,dx:150-(x2/2),dy:150-(x2/2)});
-
+    if (x1 > 250 && x1 < 260 ) {
+      drawEmoji({context:ctx,emoji:"🟥",size:x2,dx:50-(x2/2),dy:50-(x2/2)});
     }
 
-    if (x > 250 && x < 270 ) {
-
-
-
-    drawEmoji({context:ctx,emoji:"⬜",size:x2,dx:150-(x2/2),dy:150-(x2/2)});
-
+    if (x1 > 250 && x1 < 270 ) {
+    drawEmoji({context:ctx,emoji:"⬜",size:x2,dx:50-(x2/2),dy:50-(x2/2)});
    }
 
-   if (x > 270) {
+   if (x1 > 270) {
+   drawEmoji({context:ctx,emoji:"🟥",size:x2,dx:50-(x2/2),dy:50-(x2/2)});
+   }
 
-   drawEmoji({context:ctx,emoji:"🟥",size:x2,dx:150-(x2/2),dy:150-(x2/2)});
+   for (let i = 0; i < 3; i++) {
+
+    if (x2 > 99) {
+      drawEmoji({context:ctx,emoji:"⬜",size:100,dx:200-100*i,dy:100*i});
+    }
+
+    if (x2 < 100) {
+      drawEmoji({context:ctx,emoji:"⬜",size:x2,dx:250-(100*i)-(x2/2),dy:50+(100*i)-(x2/2)});
+    }
+    
+    if (x2 < 80) {
+      drawEmoji({context:ctx,emoji:"🟦",size:x2,dx:250-(100*i)-(x2/2),dy:50+(100*i)-(x2/2)});
+    }
+
+    if (x1 > 250 && x1 < 260 ) {
+      drawEmoji({context:ctx,emoji:"🟥",size:x2,dx:250-(100*i)-(x2/2),dy:50+(100*i)-(x2/2)});
+    }
+
+    if (x1 > 250 && x1 < 270 ) {
+    drawEmoji({context:ctx,emoji:"⬜",size:x2,dx:250-(100*i)-(x2/2),dy:50+(100*i)-(x2/2)});
+   }
+
+   if (x1 > 270) {
+   drawEmoji({context:ctx,emoji:"🟥",size:x2,dx:250-(100*i)-(x2/2),dy:50+(100*i)-(x2/2)});
+   }
+     
+  }
+
+  for (let i = 0; i < 5; i++) {
+
+if (x2 > 99) {
+  drawEmoji({context:ctx,emoji:"⬜",size:100,dx:400-100*i,dy:100*i});
+}
+
+if (x2 < 100) {
+  drawEmoji({context:ctx,emoji:"⬜",size:x2,dx:400-(100*i),dy:50+(100*i)-(x2/2)});
+}
+
+if (x2 < 80) {
+  drawEmoji({context:ctx,emoji:"🟦",size:x2,dx:400-(100*i),dy:50+(100*i)-(x2/2)});
+}
+
+if (x1 > 250 && x1 < 260 ) {
+  drawEmoji({context:ctx,emoji:"🟥",size:x2,dx:400-(100*i),dy:50+(100*i)-(x2/2)});
+}
+
+if (x1 > 250 && x1 < 270 ) {
+drawEmoji({context:ctx,emoji:"⬜",size:x2,dx:400-(100*i),dy:50+(100*i)-(x2/2)});
+}
+
+if (x1 > 270) {
+drawEmoji({context:ctx,emoji:"🟥",size:x2,dx:400-(100*i),dy:50+(100*i)-(x2/2)});
+}
 
 }
 
 
-    if (x > 350) {
-      state = true;
-      x = 0;
-      x2 =0;
-    } 
+
+  if (x1 > 350) {
+    state = true;
+    x1 = 0;
+    x2 =0;
+  } 
+
+    //2
+    x3 += 1;
+    if (x4 < 100 && state2){
+      x4 += 1; 
+    }
+
+    if (x3 > 100){
+       state2 = false; 
+    }
+
+    if (x3 > 250) {
+      x4 -=1 ;
+    }
+
+    for (let i = 0; i < 2; i++) {
+
+    if (x4 > 99) {
+      drawEmoji({context:ctx,emoji:"⬜",size:100,dx:100-100*i,dy:100*i});
+    }
+
+    if (x4 < 100) {
+      drawEmoji({context:ctx,emoji:"⬜",size:x4,dx:150-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
+    }
+    
+    if (x4 < 80) {
+      drawEmoji({context:ctx,emoji:"🟦",size:x4,dx:150-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
+    }
+
+    if (x3 > 250 && x3 < 260 ) {
+      drawEmoji({context:ctx,emoji:"🟥",size:x4,dx:150-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
+    }
+
+    if (x3 > 250 && x3 < 270 ) {
+    drawEmoji({context:ctx,emoji:"⬜",size:x4,dx:150-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
+   }
+
+   if (x3 > 270) {
+   drawEmoji({context:ctx,emoji:"🟥",size:x4,dx:150-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
+   }
+
+  }
+
+
+
+  
+for (let i = 0; i < 4; i++) {
+
+if (x4 > 99) {
+  drawEmoji({context:ctx,emoji:"⬜",size:100,dx:300-100*i,dy:100*i});
+}
+
+if (x4 < 100) {
+  drawEmoji({context:ctx,emoji:"⬜",size:x4,dx:350-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
+}
+
+if (x4 < 80) {
+  drawEmoji({context:ctx,emoji:"🟦",size:x4,dx:350-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
+}
+
+if (x3 > 250 && x3 < 260 ) {
+  drawEmoji({context:ctx,emoji:"🟥",size:x4,dx:350-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
+}
+
+if (x3 > 250 && x3 < 270 ) {
+drawEmoji({context:ctx,emoji:"⬜",size:x4,dx:350-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
+}
+
+if (x3 > 270) {
+drawEmoji({context:ctx,emoji:"🟥",size:x4,dx:350-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
+}
+
+}
+
+//right side
+
+for (let i = 0; i < 5; i++) {
+
+if (x4 > 99) {
+  drawEmoji({context:ctx,emoji:"⬜",size:100,dx:500+100*i,dy:100*i});
+}
+
+if (x4 < 100) {
+  drawEmoji({context:ctx,emoji:"⬜",size:x4,dx:600+(100*i)-(x4),dy:50+(100*i)-(x4/2)});
+}
+
+if (x4 < 80) {
+  drawEmoji({context:ctx,emoji:"🟦",size:x4,dx:600+(100*i)-(x4),dy:50+(100*i)-(x4/2)});
+}
+
+if (x3 > 250 && x3 < 260 ) {
+  drawEmoji({context:ctx,emoji:"🟥",size:x4,dx:600+(100*i)-(x4),dy:50+(100*i)-(x4/2)});
+}
+
+if (x3 > 250 && x3 < 270 ) {
+drawEmoji({context:ctx,emoji:"⬜",size:x4,dx:600+(100*i)-(x4),dy:50+(100*i)-(x4/2)});
+}
+
+if (x3 > 270) {
+drawEmoji({context:ctx,emoji:"🟥",size:x4,dx:600+(100*i)-(x4),dy:50+(100*i)-(x4/2)});
+}
+
+}
+
+
+
+  if (x3 > 350) {
+    state2 = true;
+    x3 = 0;
+    x4 =0;
+  } 
 
     //drawEmoji({context:ctx,emoji:"⬛",size:100,dx:0,dy:0});
     //drawEmoji({context:ctx,emoji:"⬜",size:100,dx:100,dy:0});
