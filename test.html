@@ -5,7 +5,7 @@
   body{
     margin: 0 auto;
     overflow: hidden;
-    /*background-color: black;*/
+    background-color: black;*/
   }
 
   #container {
@@ -114,7 +114,7 @@
 
   }
 
-  let emojiList = ["❤️","🧡","💛","💚","💙","💜","🤎","🖤","🤍","💗","🐱","😼","😹","🙀","😾","😿","😻","😺","😸","😽","🔥","📎","👀","👁️‍🗨️","🌜","🍏","🔩","✍️","💩","🟪","⬜","🟥","⬛","🟦"];
+  let emojiList = ["❤️","🧡","💛","💚","💙","💜","🤎","🖤","🤍","💗","🐱","😼","😹","🙀","😾","😿","😻","😺","😸","😽","🔥","📎","👀","👁️‍🗨️","🌜","🍏","🔩","✍️","💩","🟪","⬜","🟥","⬛","🟦","📉","🔣","🚼"];
   for (let i = 0; i < emojiList.length; i++) {
     emojiFunc({emoji:emojiList[i]});
   }
@@ -143,247 +143,185 @@
         dWidth = sWidth - realSize;
         console.log("sHeight",sHeight - size)
       }
-
-
-
-      //console.log(sWidth,sHeight)
-     // console.log(dWidth,dHeight)
         
     context.drawImage(image, sx, sy,sWidth,sHeight,0+dx,0+dy,dWidth,dHeight);
    }
 
-   //drawEmoji({context:ctx,emoji:"🔥",size:100,dx:214,dy:0});
-   //drawEmoji({context:ctx,emoji:"🔥",size:100,dx:114,dy:0});
-   //drawEmoji({context:ctx,emoji:"🔥",size:0,dx:0,dy:0});
+   let flip;
+
+   function draw ({colour,loop,x,dx,dxM,dy,dyM}){
+
+    let dxMN = 0;
+    let dyMN = 0;
+    if (loop > 1){
+      dxMN = parseInt(dxM+100);
+      dyMN = parseInt(dyM+100);
+    }
 
 
-  let x1 = 0;
-  let x2 = 0;
-  let state = true ;
+    console.log(flip)
 
-  let x3 = -250;
-  let x4 = -250;
-  let state2 = true 
+    for (let i = 0; i < loop; i++) {
+    if (colour) {
+
+      if (x == 0) {
+      flip = true;
+
+      }
+
+
+
+      if (x > 80) {
+      flip = false;
+      drawEmoji({context:ctx,emoji:"⬜",size:x,dx:dx-(x/2)+(dxMN*i),dy:dy-(x/2)+(dyMN*i)});
+
+      }
+
+
+
+      if (x < 81 && flip == false) {
+      drawEmoji({context:ctx,emoji:"🟥",size:x,dx:dx-(x/2)+(dxMN*i),dy:dy-(x/2)+(dyMN*i)});
+
+      }
+
+      if (x < 81 && flip) {
+      drawEmoji({context:ctx,emoji:"🟦",size:x,dx:dx-(x/2)+(dxMN*i),dy:dy-(x/2)+(dyMN*i)});
+
+      }
+
+
+
+
+
+      } else {
+      drawEmoji({context:ctx,emoji:"⬜",size:x,dx:dx-(x/2)+(dxMN*i),dy:dy-(x/2)+(dyMN*i)});
+      }
+    }
+
+  }
+   
+  let x0 = 0;
+  let state0 = true;
+
+  let x1 = 100;
 
   function drawIt() { 
     window.requestAnimationFrame(drawIt);
     ctx.clearRect(0,0,canvas.width,canvas.height)
 
-    x1 += 1;
-    if (x2 < 100 && state){
-      x2 += 1; 
+    //x0
+    if (state0 || x0 == 0) {
+      state0 = true;
+      x0 += 1.5;
+      x1 -= 1.5;
+    }
+    if (state0 == false) {
+      x0 -= 1.5;
+      x1 +=1.5;
+    }
+    if (x0 > 101 ) {
+      state0 = false;
     }
 
-    if (x1 > 100){
-       state = false; 
-    }
+    /*
+    //top top
+    drawEmoji({context:ctx,emoji:"🟥",size:x0,dx:450-(x0/2),dy:250-(x0/2)});
 
-    if (x1 > 250) {
-      x2 -=1 ;
-    }
+    //top
+    drawEmoji({context:ctx,emoji:"⬜",size:x1,dx:450-(x1/2),dy:350-(x1/2)});
 
+    //left left
+    drawEmoji({context:ctx,emoji:"🟥",size:x0,dx:250-(x0/2),dy:450-(x0/2)});
 
-    if (x2 > 99) {
-      drawEmoji({context:ctx,emoji:"⬜",size:100,dx:0,dy:0});
-    }
+    //left
+    drawEmoji({context:ctx,emoji:"⬜",size:x1,dx:350-(x1/2),dy:450-(x1/2)});
+    */
 
-    if (x2 < 100) {
-      drawEmoji({context:ctx,emoji:"⬜",size:x2,dx:50-(x2/2),dy:50-(x2/2)});
-    }
+    //left top
+    draw({colour:true,loop:1,x:x0,dx:150,dxM:"",dy:150,dyM:""});
+    draw({colour:"",loop:2,x:x1,dx:250,dxM:"-",dy:150,dyM:"+"});
+    draw({colour:true,loop:3,x:x0,dx:350,dxM:"-",dy:150,dyM:"+"});
+    draw({colour:"",loop:4,x:x1,dx:450,dxM:"-",dy:150,dyM:"+"});
+    draw({colour:true,loop:3,x:x0,dx:450,dxM:"-",dy:250,dyM:"+"});
+    draw({colour:"",loop:2,x:x1,dx:450,dxM:"-",dy:350,dyM:"+"});
+    draw({colour:"",loop:1,x:x0,dx:450,dxM:"-",dy:450,dyM:"+"});
+
+    //right top
+    draw({colour:"",loop:1,x:x0,dx:650,dxM:"",dy:450,dyM:""});
+    draw({colour:"",loop:2,x:x1,dx:650,dxM:"+",dy:350,dyM:"+"});
+    draw({colour:true,loop:3,x:x0,dx:650,dxM:"+",dy:250,dyM:"+"});
+    draw({colour:"",loop:4,x:x1,dx:650,dxM:"+",dy:150,dyM:"+"});
+    draw({colour:true,loop:3,x:x0,dx:750,dxM:"+",dy:150,dyM:"+"});
+    draw({colour:"",loop:2,x:x1,dx:850,dxM:"+",dy:150,dyM:"+"});
+    draw({colour:true,loop:1,x:x0,dx:950,dxM:"",dy:150,dyM:""});
+
+    //left 
+    draw({colour:true,loop:1,x:x0,dx:150,dxM:"",dy:550,dyM:""});
+    draw({colour:"",loop:1,x:x1,dx:250,dxM:"",dy:550,dyM:""});
+    draw({colour:true,loop:1,x:x0,dx:350,dxM:"",dy:550,dyM:""});
+    draw({colour:"",loop:1,x:x1,dx:450,dxM:"",dy:550,dyM:""});
+
+    //top
+    draw({colour:true,loop:1,x:x0,dx:550,dxM:"",dy:150,dyM:""});
+    draw({colour:"",loop:1,x:x1,dx:550,dxM:"",dy:250,dyM:""});
+    draw({colour:true,loop:1,x:x0,dx:550,dxM:"",dy:350,dyM:""});
+    draw({colour:"",loop:1,x:x1,dx:550,dxM:"",dy:450,dyM:""});
+
+    //centre
+    draw({colour:"",loop:1,x:x0,dx:550,dxM:"-",dy:550,dyM:"+"});
+
+    //bottom
+    draw({colour:"",loop:1,x:x1,dx:550,dxM:"",dy:650,dyM:""});
+    draw({colour:true,loop:1,x:x0,dx:550,dxM:"",dy:750,dyM:""});
+    draw({colour:"",loop:1,x:x1,dx:550,dxM:"",dy:850,dyM:""});
+    draw({colour:true,loop:1,x:x0,dx:550,dxM:"",dy:950,dyM:""});
+
+    //right
+    draw({colour:"",loop:1,x:x1,dx:650,dxM:"",dy:550,dyM:""});
+    draw({colour:"true",loop:1,x:x0,dx:750,dxM:"",dy:550,dyM:""});
+    draw({colour:"",loop:1,x:x1,dx:850,dxM:"",dy:550,dyM:""});
+    draw({colour:"true",loop:1,x:x0,dx:950,dxM:"",dy:550,dyM:""});
     
-    if (x2 < 80) {
-      drawEmoji({context:ctx,emoji:"🟦",size:x2,dx:50-(x2/2),dy:50-(x2/2)});
-    }
+    //left bottom
+    draw({colour:true,loop:1,x:x0,dx:150,dxM:"",dy:950,dyM:""});
+    draw({colour:"",loop:2,x:x1,dx:150,dxM:"+",dy:850,dyM:"+"});
+    draw({colour:true,loop:3,x:x0,dx:150,dxM:"+",dy:750,dyM:"+"});
+    draw({colour:"",loop:4,x:x1,dx:150,dxM:"+",dy:650,dyM:"+"});
+    draw({colour:"true",loop:3,x:x0,dx:250,dxM:"+",dy:650,dyM:"+"});
+    draw({colour:"",loop:2,x:x1,dx:350,dxM:"+",dy:650,dyM:"+"});
+    draw({colour:"",loop:1,x:x0,dx:450,dxM:"",dy:650,dyM:""});
 
-    if (x1 > 250 && x1 < 260 ) {
-      drawEmoji({context:ctx,emoji:"🟥",size:x2,dx:50-(x2/2),dy:50-(x2/2)});
-    }
+    //right bottom
+    draw({colour:"",loop:1,x:x0,dx:650,dxM:"",dy:650,dyM:""})
+    draw({colour:"",loop:2,x:x1,dx:650,dxM:"+",dy:750,dyM:"-"})
+    draw({colour:"true",loop:3,x:x0,dx:650,dxM:"+",dy:850,dyM:"-"})
+    draw({colour:"",loop:4,x:x1,dx:650,dxM:"+",dy:950,dyM:"-"})
+    draw({colour:true,loop:3,x:x0,dx:750,dxM:"+",dy:950,dyM:"-"})
+    draw({colour:"",loop:2,x:x1,dx:850,dxM:"+",dy:950,dyM:"-"})
+    draw({colour:true,loop:1,x:x0,dx:950,dxM:"+",dy:950,dyM:"-"})
 
-    if (x1 > 250 && x1 < 270 ) {
-    drawEmoji({context:ctx,emoji:"⬜",size:x2,dx:50-(x2/2),dy:50-(x2/2)});
-   }
+    //right bottom
 
-   if (x1 > 270) {
-   drawEmoji({context:ctx,emoji:"🟥",size:x2,dx:50-(x2/2),dy:50-(x2/2)});
-   }
+    //drawEmoji({context:ctx,emoji:"⬜",size:x0,dx:450-(x0/2),dy:450-(x0/2)});
+    //centre
 
-   for (let i = 0; i < 3; i++) {
+    /*
 
-    if (x2 > 99) {
-      drawEmoji({context:ctx,emoji:"⬜",size:100,dx:200-100*i,dy:100*i});
-    }
+    //right
+    drawEmoji({context:ctx,emoji:"⬜",size:x1,dx:550-(x1/2),dy:450-(x1/2)});
 
-    if (x2 < 100) {
-      drawEmoji({context:ctx,emoji:"⬜",size:x2,dx:250-(100*i)-(x2/2),dy:50+(100*i)-(x2/2)});
-    }
-    
-    if (x2 < 80) {
-      drawEmoji({context:ctx,emoji:"🟦",size:x2,dx:250-(100*i)-(x2/2),dy:50+(100*i)-(x2/2)});
-    }
+    //right right
+    drawEmoji({context:ctx,emoji:"🟥",size:x0,dx:650-(x0/2),dy:450-(x0/2)});
 
-    if (x1 > 250 && x1 < 260 ) {
-      drawEmoji({context:ctx,emoji:"🟥",size:x2,dx:250-(100*i)-(x2/2),dy:50+(100*i)-(x2/2)});
-    }
+    //bottom
+    drawEmoji({context:ctx,emoji:"⬜",size:x1,dx:450-(x1/2),dy:550-(x1/2)});
 
-    if (x1 > 250 && x1 < 270 ) {
-    drawEmoji({context:ctx,emoji:"⬜",size:x2,dx:250-(100*i)-(x2/2),dy:50+(100*i)-(x2/2)});
-   }
+    //bottom bottom
+    drawEmoji({context:ctx,emoji:"🟥",size:x0,dx:450-(x0/2),dy:650-(x0/2)});
 
-   if (x1 > 270) {
-   drawEmoji({context:ctx,emoji:"🟥",size:x2,dx:250-(100*i)-(x2/2),dy:50+(100*i)-(x2/2)});
-   }
-     
-  }
-
-  for (let i = 0; i < 5; i++) {
-
-if (x2 > 99) {
-  drawEmoji({context:ctx,emoji:"⬜",size:100,dx:400-100*i,dy:100*i});
-}
-
-if (x2 < 100) {
-  drawEmoji({context:ctx,emoji:"⬜",size:x2,dx:400-(100*i),dy:50+(100*i)-(x2/2)});
-}
-
-if (x2 < 80) {
-  drawEmoji({context:ctx,emoji:"🟦",size:x2,dx:400-(100*i),dy:50+(100*i)-(x2/2)});
-}
-
-if (x1 > 250 && x1 < 260 ) {
-  drawEmoji({context:ctx,emoji:"🟥",size:x2,dx:400-(100*i),dy:50+(100*i)-(x2/2)});
-}
-
-if (x1 > 250 && x1 < 270 ) {
-drawEmoji({context:ctx,emoji:"⬜",size:x2,dx:400-(100*i),dy:50+(100*i)-(x2/2)});
-}
-
-if (x1 > 270) {
-drawEmoji({context:ctx,emoji:"🟥",size:x2,dx:400-(100*i),dy:50+(100*i)-(x2/2)});
-}
-
-}
+    */
 
 
-
-  if (x1 > 350) {
-    state = true;
-    x1 = 0;
-    x2 =0;
-  } 
-
-    //2
-    x3 += 1;
-    if (x4 < 100 && state2){
-      x4 += 1; 
-    }
-
-    if (x3 > 100){
-       state2 = false; 
-    }
-
-    if (x3 > 250) {
-      x4 -=1 ;
-    }
-
-    for (let i = 0; i < 2; i++) {
-
-    if (x4 > 99) {
-      drawEmoji({context:ctx,emoji:"⬜",size:100,dx:100-100*i,dy:100*i});
-    }
-
-    if (x4 < 100) {
-      drawEmoji({context:ctx,emoji:"⬜",size:x4,dx:150-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
-    }
-    
-    if (x4 < 80) {
-      drawEmoji({context:ctx,emoji:"🟦",size:x4,dx:150-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
-    }
-
-    if (x3 > 250 && x3 < 260 ) {
-      drawEmoji({context:ctx,emoji:"🟥",size:x4,dx:150-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
-    }
-
-    if (x3 > 250 && x3 < 270 ) {
-    drawEmoji({context:ctx,emoji:"⬜",size:x4,dx:150-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
-   }
-
-   if (x3 > 270) {
-   drawEmoji({context:ctx,emoji:"🟥",size:x4,dx:150-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
-   }
-
-  }
-
-
-
-  
-for (let i = 0; i < 4; i++) {
-
-if (x4 > 99) {
-  drawEmoji({context:ctx,emoji:"⬜",size:100,dx:300-100*i,dy:100*i});
-}
-
-if (x4 < 100) {
-  drawEmoji({context:ctx,emoji:"⬜",size:x4,dx:350-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
-}
-
-if (x4 < 80) {
-  drawEmoji({context:ctx,emoji:"🟦",size:x4,dx:350-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
-}
-
-if (x3 > 250 && x3 < 260 ) {
-  drawEmoji({context:ctx,emoji:"🟥",size:x4,dx:350-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
-}
-
-if (x3 > 250 && x3 < 270 ) {
-drawEmoji({context:ctx,emoji:"⬜",size:x4,dx:350-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
-}
-
-if (x3 > 270) {
-drawEmoji({context:ctx,emoji:"🟥",size:x4,dx:350-(100*i)-(x4/2),dy:50+(100*i)-(x4/2)});
-}
-
-}
-
-//right side
-
-for (let i = 0; i < 5; i++) {
-
-if (x4 > 99) {
-  drawEmoji({context:ctx,emoji:"⬜",size:100,dx:500+100*i,dy:100*i});
-}
-
-if (x4 < 100) {
-  drawEmoji({context:ctx,emoji:"⬜",size:x4,dx:600+(100*i)-(x4),dy:50+(100*i)-(x4/2)});
-}
-
-if (x4 < 80) {
-  drawEmoji({context:ctx,emoji:"🟦",size:x4,dx:600+(100*i)-(x4),dy:50+(100*i)-(x4/2)});
-}
-
-if (x3 > 250 && x3 < 260 ) {
-  drawEmoji({context:ctx,emoji:"🟥",size:x4,dx:600+(100*i)-(x4),dy:50+(100*i)-(x4/2)});
-}
-
-if (x3 > 250 && x3 < 270 ) {
-drawEmoji({context:ctx,emoji:"⬜",size:x4,dx:600+(100*i)-(x4),dy:50+(100*i)-(x4/2)});
-}
-
-if (x3 > 270) {
-drawEmoji({context:ctx,emoji:"🟥",size:x4,dx:600+(100*i)-(x4),dy:50+(100*i)-(x4/2)});
-}
-
-}
-
-
-
-  if (x3 > 350) {
-    state2 = true;
-    x3 = 0;
-    x4 =0;
-  } 
-
-    //drawEmoji({context:ctx,emoji:"⬛",size:100,dx:0,dy:0});
-    //drawEmoji({context:ctx,emoji:"⬜",size:100,dx:100,dy:0});
 
   }
 drawIt();
